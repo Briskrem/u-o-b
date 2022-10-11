@@ -59,6 +59,9 @@ class Crypto{
 
     getTicker(name, tracker){
         let newRequestTracker = tracker
+        const time = setTimeout(()=>{
+            wss.close()
+        }, 10000)
         if(newRequestTracker > 1) {
             console.log(newRequestTracker, wss.readyState, 'WSS READY STATE AT THE TOP B4 ITS INITIALISED')
             wss.close()
@@ -103,7 +106,7 @@ class Crypto{
                     wss.addEventListener('message', ({data})=>{
                         let dataString = Buffer.from(data).toString('utf-8')
                         io.emit('meta',  `${dataString}`)  
-                        // console.log(dataString)                                
+                        console.log(dataString)                                
                     })  
                     // In the cycle this function responds before MYASYNC runs, because its the previous listener thats responding. 
                     wss.addEventListener('close', (data)=>{
