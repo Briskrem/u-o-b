@@ -4,30 +4,19 @@ const axios = require('axios')
 const Alpaca = require("@alpacahq/alpaca-trade-api");
 require('dotenv').config()
 
-// console.log(process.env)
-// API_KEY = "PKJ25VIKNH5KJT9BQIEJ"
-
-// SECRET_KEY = "xJ9gYs1L2Ulte3LyTysf3w1pjV0QEEJkhGkBkcrZ"
-
 const router = express.Router()
 const BASE_URL = 'https://data.alpaca.markets/v1beta2/crypto'
 const crypto_url = 'wss://stream.data.alpaca.markets/v1beta2/crypto';
-// const apiKey = process.env.API_KEY
-// const secretKey = process.env.SECRET_KEY
-const apiKey = "PKJ25VIKNH5KJT9BQIEJ"
-const secretKey = "xJ9gYs1L2Ulte3LyTysf3w1pjV0QEEJkhGkBkcrZ"
+const apiKey = process.env.API_KEY
+const secretKey = process.env.SECRET_KEY
 const auth = {"action": "auth", "key": `${apiKey}`, "secret": `${secretKey}`};
 
-console.log(apiKey, secretKey)
 
 let wss = null;
 
 class Crypto{
-
-
     static async getGraph(name, time){
         console.log(name,time,'tell me why')
-
         const method = 'GET'
         const url = 'https://data.alpaca.markets/v1beta2/crypto/bars'
         const params = {
@@ -36,22 +25,16 @@ class Crypto{
             start: '2022-07-01',
             limit: 200
         }
-        
         const headers = {
         'APCA-API-KEY-ID': `${apiKey}`,
         'APCA-API-SECRET-KEY': `${secretKey}`
         }
-    
         try{
-            console.log('right above api request')
-            // const resp = await axios.get('https://data.alpaca.markets/v1beta2/BTC/USD/bars')
             const resp = await axios({url, method, params, headers})
-            // console.log(resp.data.bars, 'ππππππππππππππππππ')
             return resp.data;
         }catch(e){
             console.log('failed')
         }
-     
     }
 
 
@@ -68,10 +51,7 @@ class Crypto{
             // READYSTATE AT 2, IT NEEDSS TO BE AT O FOR NEW CONNECTION
             console.log(wss.readyState, 'WSS READY STATE AT THE BOTTOM B4 ITS INITIALISED, because its from the previous instance % TRACKER GREATER THAN 1 SO I JUST CLOSED THE WSS LOOP')
         }
-        function getTicker(name, zz){ 
-            const cryptoName = name
-            // const cryptoName = req.params.cryptoID
-            // const subscription = {"action":"subscribe",  "quotes":[`${cryptoName}/USD`], "bars":['*']};
+        function getTicker(cryptoName){ 
             const subscription = {"action":"subscribe","quotes":[`${cryptoName}/USD`] ,"bars":["BTC/USD"]}
             console.log(cryptoName, subscription, '++++++++++++++++++++++++++++++++++++++++++++')
     
@@ -115,7 +95,7 @@ class Crypto{
                         //this listener responds before io.connect and MYASYNC, because it is the listener from the previous request,
                         //therefore it logs the crypto of the previous ws request while the current request is parsing.
                         console.log('WSS disconnected, NOW WSS READY TO RE-connect', cryptoName, subscription)
-                        // connectAlpaca(cryptoName, subscription)
+            
                     }) 
                 }  
             }
