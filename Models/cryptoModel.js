@@ -7,10 +7,13 @@ require('dotenv').config()
 const router = express.Router()
 const BASE_URL = 'https://data.alpaca.markets/v1beta2/crypto'
 const crypto_url = 'wss://stream.data.alpaca.markets/v1beta2/crypto';
-const apiKey = process.env.API_KEY
-const secretKey = process.env.SECRET_KEY
+// const apiKey = process.env.API_KEY
+// const secretKey = process.env.SECRET_KEY
+const apiKey = "PKJ25VIKNH5KJT9BQIEJ"
+const secretKey = "xJ9gYs1L2Ulte3LyTysf3w1pjV0QEEJkhGkBkcrZ"
 const auth = {"action": "auth", "key": `${apiKey}`, "secret": `${secretKey}`};
 
+console.log(process.env)
 
 let wss = null;
 
